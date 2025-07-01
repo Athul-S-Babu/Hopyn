@@ -32,7 +32,7 @@ class AppConstants {
   static const double inputBorderRadius = 8.0;
 
   // Animation Durations
-  static const Duration splashDuration = Duration(seconds: 2);
+  static const Duration splashDuration = Duration(seconds: 3);
   static const Duration defaultAnimationDuration = Duration(milliseconds: 100);
   static const Duration longAnimationDuration = Duration(milliseconds: 500);
 

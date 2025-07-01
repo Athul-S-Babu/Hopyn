@@ -156,9 +156,10 @@ class _VehicleSelectionScreenState extends ConsumerState<VehicleSelectionScreen>
     return Scaffold(
       backgroundColor: AppColors.kWhite,
       appBar: AppBar(
-        title: const Text('Select Vehicle'),
+        backgroundColor: AppColors.kWhite,
+        title: const Text('Select Vehicle',style: TextStyle(color:AppColors.kPrimaryColor, ),),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back,color:AppColors.kPrimaryColor, ),
           onPressed: () => context.go('/location-selector'),
         ),
       ),

@@ -101,7 +101,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     if (!value.isValidEmail) return 'Please enter a valid email';
                     return null;
                   },
-                  prefixIcon: const Icon(Icons.email_outlined, color: AppColors.kYellow),
+                  prefixIcon: const Icon(Icons.email_outlined, color: AppColors.kPrimaryColor),
 
                   labelStyle: const TextStyle(color: AppColors.kPrimaryColor),
                   fillColor: AppColors.kWhiteShade,
@@ -127,7 +127,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     }
                     return null;
                   },
-                  prefixIcon: const Icon(Icons.lock_outline, color: AppColors.kYellow),
+                  prefixIcon: const Icon(Icons.lock_outline, color: AppColors.kPrimaryColor),
                   labelStyle: const TextStyle(color: AppColors.kPrimaryColor),
                   hintStyle: const TextStyle(
                       color: AppColors.kBlackShade,
@@ -150,12 +150,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 4),
 
                 // Login Button
-                CustomButton(
-                  text: 'Sign In',
-                  onPressed: _login,
+                // CustomButton(
+                //   text: 'Sign In',
+                //   onPressed: _login,
+                //   isLoading: _isLoading,
+                //
+                // ),
+            CustomButton(
+                   text: 'Sign In',
                   isLoading: _isLoading,
-                ),
+                   onPressed: () async {
+                    setState(() => _isLoading = true);
 
+                    // Simulate API delay
+                     await Future.delayed(Duration(seconds: 0));
+
+                    setState(() => _isLoading = false);
+
+                    // Only navigate AFTER delay
+                    if (mounted) context.go('/home');
+                  },
+                ),
                 const SizedBox(height: 10),
 
                 // Sign Up Prompt

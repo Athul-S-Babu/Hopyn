@@ -51,12 +51,14 @@ class LoadingIndicator extends StatelessWidget {
 class PulsingLoadingIndicator extends StatefulWidget {
   final String? message;
   final Color? color;
+  final Color? messageColor;
   final Duration duration;
 
   const PulsingLoadingIndicator({
     Key? key,
     this.message,
     this.color,
+    this.messageColor,
     this.duration = const Duration(milliseconds: 1500),
   }) : super(key: key);
 
@@ -94,6 +96,7 @@ class _PulsingLoadingIndicatorState extends State<PulsingLoadingIndicator> with 
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = widget.color ?? theme.colorScheme.primary;
+    final messageColor = widget.messageColor ?? theme.colorScheme.onSurface.withOpacity(0.8);
 
     return Center(
       child: Column(
@@ -140,7 +143,7 @@ class _PulsingLoadingIndicatorState extends State<PulsingLoadingIndicator> with 
             Text(
               widget.message!,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.8),
+                color: messageColor,
               ),
               textAlign: TextAlign.center,
             ),

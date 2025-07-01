@@ -15,9 +15,9 @@ class AppAssets {
   static const String messageIconSvg = 'assets/icons/message.svg';
   
   // Onboarding Assets
-  static const String onboarding1Svg = 'assets/images/ani1.png';
-  static const String onboarding2Svg ='assets/images/ani1.png';
-  static const String onboarding3Svg = 'assets/images/ani1.png';
+  static const String onboarding1Svg = 'assets/images/taxi.png';
+  static const String onboarding2Svg ='assets/images/Ride.png';
+  static const String onboarding3Svg = 'assets/images/journey.png';
   
   // Vehicle Type Images
   static const String economySvg = 'assets/images/economy.svg';

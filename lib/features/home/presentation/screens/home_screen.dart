@@ -154,10 +154,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Where to?',
-                    style: context.textTheme.headlineMedium?.copyWith(
-                      color: AppColors.kPrimaryColor
-                    )
+                      'Where to?',
+                      style: context.textTheme.headlineMedium?.copyWith(
+                          color: AppColors.kPrimaryColor
+                      )
                   ),
                   const SizedBox(height: 16),
 
@@ -177,7 +177,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           Text(
                             'Enter destination',
                             style: context.textTheme.bodyLarge?.copyWith(
-                              color: AppColors.kBlackShade
+                                color: AppColors.kBlackShade
                             ),
                           ),
                         ],
@@ -189,10 +189,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                   // Saved Locations
                   Text(
-                    'Saved Places',
-                    style: context.textTheme.titleLarge?.copyWith(
-                      color: AppColors.kPrimaryColor
-                    )
+                      'Saved Places',
+                      style: context.textTheme.titleLarge?.copyWith(
+                          color: AppColors.kPrimaryColor
+                      )
 
                   ),
                   const SizedBox(height: 12),
@@ -203,7 +203,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: savedLocations.length > 3 ? 3 : savedLocations.length,
                     separatorBuilder: (context, index) => const Divider(
-                      color: AppColors.kBlackShade
+                        color: AppColors.kBlackShade
                     ),
                     itemBuilder: (context, index) {
                       final location = savedLocations[index];
@@ -219,8 +219,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             index == 0
                                 ? Icons.home
                                 : index == 1
-                                    ? Icons.work
-                                    : Icons.favorite,
+                                ? Icons.work
+                                : Icons.favorite,
                             color: AppColors.kPrimaryColor,
                           ),
                         ),
@@ -233,7 +233,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            color: AppColors.kPrimaryColor
+                              color: AppColors.kPrimaryColor
                           ),
                         ),
                         onTap: () {

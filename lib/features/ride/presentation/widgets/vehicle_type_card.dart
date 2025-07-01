@@ -22,12 +22,12 @@ class VehicleTypeCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
-      color:AppColors.kWhite,
+      color: isSelected ? AppColors.kPrimaryColor : AppColors.kWhite,
       elevation: isSelected ? 3 : 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: isSelected ? AppColors.kYellow: AppColors.kPrimaryColor,
+
           width: 2,
         ),
       ),
@@ -50,7 +50,7 @@ class VehicleTypeCard extends StatelessWidget {
                 child: Center(
                   child: Icon(
                     _getVehicleIcon(vehicleType.category),
-                    color: isSelected ? AppColors.kYellow :  AppColors.kPrimaryColor,
+                    color: isSelected ? AppColors.kWhite :  AppColors.kPrimaryColor,
                     size: 32,
                   ),
                 ),
@@ -69,14 +69,14 @@ class VehicleTypeCard extends StatelessWidget {
                           vehicleType.name,
                           style: context.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.kPrimaryColor
+                            color: isSelected ? AppColors.kWhite : AppColors.kPrimaryColor,
                           ),
                         ),
                         Text(
                           estimatedPrice.toCurrency,
                           style: context.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                         color: AppColors.kPrimaryColor
+                            color: isSelected ? AppColors.kWhite : AppColors.kPrimaryColor,
                           ),
                         ),
                       ],
@@ -85,7 +85,10 @@ class VehicleTypeCard extends StatelessWidget {
                     Text(
                       vehicleType.description,
                       style: context.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.kBlackShade.withOpacity(0.7),
+                        color: isSelected
+                            ? AppColors.kWhite
+                            : AppColors.kBlackShade.withOpacity(0.7),
+
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -93,23 +96,23 @@ class VehicleTypeCard extends StatelessWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.access_time,
                           size: 16,
-                          color:AppColors.kPrimaryColor,
+                          color: isSelected ? AppColors.kWhite : AppColors.kPrimaryColor,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           '${vehicleType.estimatedTime.toInt()} min',
                           style: context.textTheme.bodySmall?.copyWith(
-                              color:AppColors.kPrimaryColor
+                            color: isSelected ? AppColors.kWhite : AppColors.kPrimaryColor,
                           ),
                         ),
                         const SizedBox(width: 12),
-                        const Icon(
+                         Icon(
                           Icons.person,
                           size: 16,
-                            color:AppColors.kPrimaryColor
+                           color: isSelected ? AppColors.kWhite : AppColors.kPrimaryColor,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -128,13 +131,13 @@ class VehicleTypeCard extends StatelessWidget {
               if (isSelected)
                 Container(
                   padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
+                  decoration: const BoxDecoration(
+                    color: AppColors.kWhite,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.check,
-                    color: Colors.white,
+                    color:  AppColors.kBlack,
                     size: 16,
                   ),
                 ),

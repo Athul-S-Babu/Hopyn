@@ -3,15 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app_router.dart';
 import 'theme.dart';
 
-class UberCloneApp extends ConsumerWidget {
-  const UberCloneApp({Key? key}) : super(key: key);
+class HopynApp extends ConsumerWidget {
+  const HopynApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     
     return MaterialApp.router(
-      title: 'Uber Clone',
+      title: 'Hopyn App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

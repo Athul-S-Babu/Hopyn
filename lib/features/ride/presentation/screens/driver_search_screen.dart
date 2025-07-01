@@ -77,6 +77,7 @@ class _DriverSearchScreenState extends ConsumerState<DriverSearchScreen> with Si
     final ride = currentRide.ride;
 
     return Scaffold(
+      backgroundColor: AppColors.kGrey,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -85,9 +86,10 @@ class _DriverSearchScreenState extends ConsumerState<DriverSearchScreen> with Si
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Animation
-                PulsingLoadingIndicator(
-                  color: context.colorScheme.primary,
+                const PulsingLoadingIndicator(
+                  color: AppColors.kPrimaryColor,
                   message: 'Finding your driver...',
+                messageColor:  AppColors.kPrimaryColor,
                 ),
 
                 const SizedBox(height: 40),
@@ -96,7 +98,7 @@ class _DriverSearchScreenState extends ConsumerState<DriverSearchScreen> with Si
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.kPrimaryColor,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -113,12 +115,12 @@ class _DriverSearchScreenState extends ConsumerState<DriverSearchScreen> with Si
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: context.colorScheme.primary.withOpacity(0.1),
+                              //  color: AppColors.kWhite,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Icon(
+                            child: const Icon(
                               Icons.directions_car,
-                              color: context.colorScheme.primary,
+                              color: AppColors.kWhite
                             ),
                           ),
                           const SizedBox(width: 12),

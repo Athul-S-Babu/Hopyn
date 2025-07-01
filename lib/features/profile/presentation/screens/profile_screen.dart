@@ -22,7 +22,7 @@ class ProfileScreen extends ConsumerWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.kPrimaryColor),
           onPressed: () {
-            Navigator.of(context).pop();
+            context.go('/home');
           },
         ),
 

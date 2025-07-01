@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +8,7 @@ import '../../../../core/utils/extensions.dart';
 import '../../../home/domain/entities/ride.dart';
 import '../../../home/presentation/providers/home_providers.dart';
 
+
 class RideHistoryScreen extends ConsumerWidget {
   const RideHistoryScreen({Key? key}) : super(key: key);
 
@@ -14,21 +16,24 @@ class RideHistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final rideHistory = ref.watch(rideHistoryProvider);
 
-    // Group rides by month
     final Map<String, List<Ride>> groupedRides = {};
     for (final ride in rideHistory) {
       if (ride.startTime != null) {
         final monthYear = DateFormat('MMMM yyyy').format(ride.startTime!);
-        if (!groupedRides.containsKey(monthYear)) {
-          groupedRides[monthYear] = [];
-        }
-        groupedRides[monthYear]!.add(ride);
+        groupedRides.putIfAbsent(monthYear, () => []).add(ride);
       }
     }
 
     return Scaffold(
+      backgroundColor: AppColors.kWhite,
       appBar: AppBar(
-        title: const Text('Ride History'),
+        title: const Text(
+          'Ride History',
+          style: TextStyle(color: AppColors.kPrimaryColor),
+        ),
+        backgroundColor: AppColors.kWhite,
+        iconTheme: const IconThemeData(color: AppColors.kPrimaryColor),
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/home'),
@@ -37,14 +42,14 @@ class RideHistoryScreen extends ConsumerWidget {
       body: rideHistory.isEmpty
           ? _buildEmptyState(context)
           : ListView(
-              padding: const EdgeInsets.all(AppConstants.defaultPadding),
-              children: [
-                for (final entry in groupedRides.entries) ...[
-                  _SectionHeader(title: entry.key),
-                  ...entry.value.map((ride) => _RideHistoryItem(ride: ride)),
-                ],
-              ],
-            ),
+        padding: const EdgeInsets.all(AppConstants.defaultPadding),
+        children: [
+          for (final entry in groupedRides.entries) ...[
+            _SectionHeader(title: entry.key),
+            ...entry.value.map((ride) => _RideHistoryItem(ride: ride)),
+          ],
+        ],
+      ),
     );
   }
 
@@ -56,18 +61,20 @@ class RideHistoryScreen extends ConsumerWidget {
           Icon(
             Icons.history,
             size: 64,
-            color: context.colorScheme.primary.withOpacity(0.5),
+            color: AppColors.kPrimaryColor.withOpacity(0.5),
           ),
           const SizedBox(height: 16),
           Text(
             'No Ride History',
-            style: context.textTheme.headlineMedium,
+            style: context.textTheme.headlineMedium?.copyWith(
+              color: AppColors.kPrimaryColor,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             'Your completed rides will appear here',
             style: context.textTheme.bodyLarge?.copyWith(
-              color: context.colorScheme.onSurface.withOpacity(0.7),
+              color: AppColors.kPrimaryColor.withOpacity(0.7),
             ),
             textAlign: TextAlign.center,
           ),
@@ -80,10 +87,7 @@ class RideHistoryScreen extends ConsumerWidget {
 class _SectionHeader extends StatelessWidget {
   final String title;
 
-  const _SectionHeader({
-    Key? key,
-    required this.title,
-  }) : super(key: key);
+  const _SectionHeader({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +97,7 @@ class _SectionHeader extends StatelessWidget {
         title,
         style: context.textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.bold,
+          color: AppColors.kPrimaryColor,
         ),
       ),
     );
@@ -102,10 +107,7 @@ class _SectionHeader extends StatelessWidget {
 class _RideHistoryItem extends StatelessWidget {
   final Ride ride;
 
-  const _RideHistoryItem({
-    Key? key,
-    required this.ride,
-  }) : super(key: key);
+  const _RideHistoryItem({Key? key, required this.ride}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,21 +117,23 @@ class _RideHistoryItem extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
+      color: AppColors.kWhite,
       shape: RoundedRectangleBorder(
+
         borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: AppColors.kPrimaryColor
+        )
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          // Show ride details
-          _showRideDetails(context, ride);
-        },
+        onTap: () => _showRideDetails(context, ride),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Date and price
+              // Date & price
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -137,69 +141,58 @@ class _RideHistoryItem extends StatelessWidget {
                     dateString,
                     style: context.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: AppColors.kPrimaryColor,
                     ),
                   ),
                   Text(
                     ride.fare?.toCurrency ?? '\$0.00',
                     style: context.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: AppColors.kPrimaryColor,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-
-              // Ride type and metrics
+              // Ride type + metrics
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: context.colorScheme.primary.withOpacity(0.1),
+                      color: AppColors.kPrimaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
                       ride.vehicleType?.name ?? 'Ride',
                       style: context.textTheme.bodyMedium?.copyWith(
-                        color: context.colorScheme.primary,
+                        color: AppColors.kPrimaryColor,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Icon(
-                    Icons.straighten,
-                    size: 16,
-                    color: context.colorScheme.onSurface.withOpacity(0.6),
-                  ),
+                  Icon(Icons.straighten, size: 16, color: AppColors.kPrimaryColor.withOpacity(0.6)),
                   const SizedBox(width: 4),
                   Text(
                     ride.distance?.toDistance ?? '0 km',
                     style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onSurface.withOpacity(0.7),
+                      color: AppColors.kPrimaryColor.withOpacity(0.7),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Icon(
-                    Icons.access_time,
-                    size: 16,
-                    color: context.colorScheme.onSurface.withOpacity(0.6),
-                  ),
+                  Icon(Icons.access_time, size: 16, color: AppColors.kPrimaryColor.withOpacity(0.6)),
                   const SizedBox(width: 4),
                   Text(
                     ride.duration?.toTime ?? '0 min',
                     style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onSurface.withOpacity(0.7),
+                      color: AppColors.kPrimaryColor.withOpacity(0.7),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-
-              // Pickup and dropoff
+              // Pickup & dropoff with original green & red
               _LocationRow(
                 icon: Icons.circle_outlined,
                 text: ride.pickupLocation?.address ?? 'Unknown pickup',
@@ -210,11 +203,7 @@ class _RideHistoryItem extends StatelessWidget {
                 padding: EdgeInsets.only(left: 12.0),
                 child: SizedBox(
                   height: 16,
-                  child: VerticalDivider(
-                    width: 1,
-                    thickness: 1,
-                    color: Colors.grey,
-                  ),
+                  child: VerticalDivider(width: 1, thickness: 1, color: Colors.grey),
                 ),
               ),
               const SizedBox(height: 2),
@@ -232,10 +221,13 @@ class _RideHistoryItem extends StatelessWidget {
 
   void _showRideDetails(BuildContext context, Ride ride) {
     showModalBottomSheet(
+      backgroundColor: AppColors.kGrey,
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20),
+
+        ),
       ),
       builder: (context) {
         final dateFormatter = DateFormat('MMMM d, yyyy - h:mm a');
@@ -247,108 +239,51 @@ class _RideHistoryItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
               Center(
                 child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+
+                  width: 40, height: 4,
+                  decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(2)),
                 ),
               ),
               const SizedBox(height: 24),
-
-              // Title
-              Text(
-                'Ride Details',
-                style: context.textTheme.headlineSmall,
-              ),
+              Text('Ride Details', style: context.textTheme.headlineSmall?.copyWith(color: AppColors.kPrimaryColor)),
               const SizedBox(height: 8),
-              Text(
-                dateString,
+              Text(dateString,
                 style: context.textTheme.bodyLarge?.copyWith(
-                  color: context.colorScheme.onSurface.withOpacity(0.7),
+                  color: AppColors.kPrimaryColor.withOpacity(0.7),
                 ),
               ),
               const SizedBox(height: 24),
-
-              // Locations
-              _DetailRow(
-                title: 'Pickup',
-                value: ride.pickupLocation?.address ?? 'Unknown',
-                icon: Icons.circle_outlined,
-                iconColor: Colors.green,
-              ),
+              _DetailRow(title: 'Pickup', value: ride.pickupLocation?.address ?? 'Unknown', icon: Icons.circle_outlined, iconColor: Colors.green),
               const SizedBox(height: 16),
-              _DetailRow(
-                title: 'Dropoff',
-                value: ride.dropoffLocation?.address ?? 'Unknown',
-                icon: Icons.location_on,
-                iconColor: Colors.red,
-              ),
+              _DetailRow(title: 'Dropoff', value: ride.dropoffLocation?.address ?? 'Unknown', icon: Icons.location_on, iconColor: Colors.red),
               const SizedBox(height: 24),
-
-              // Ride details
               const Divider(),
               const SizedBox(height: 16),
-
-              // Vehicle and driver
-              _DetailRow(
-                title: 'Vehicle Type',
-                value: ride.vehicleType?.name ?? 'Unknown',
-                icon: Icons.directions_car,
-              ),
+              _DetailRow(title: 'Vehicle Type', value: ride.vehicleType?.name ?? 'Unknown', icon: Icons.directions_car),
               const SizedBox(height: 16),
-              _DetailRow(
-                title: 'Driver',
-                value: ride.driver?.name ?? 'Unknown',
-                icon: Icons.person,
-              ),
+              _DetailRow(title: 'Driver', value: ride.driver?.name ?? 'Unknown', icon: Icons.person),
               const SizedBox(height: 16),
-
-              // Stats
               Row(
                 children: [
-                  Expanded(
-                    child: _StatBox(
-                      title: 'Distance',
-                      value: ride.distance?.toDistance ?? '0 km',
-                      icon: Icons.straighten,
-                    ),
-                  ),
+                  Expanded(child: _StatBox(title: 'Distance', value: ride.distance?.toDistance ?? '0 km', icon: Icons.straighten)),
                   const SizedBox(width: 16),
-                  Expanded(
-                    child: _StatBox(
-                      title: 'Duration',
-                      value: ride.duration?.toTime ?? '0 min',
-                      icon: Icons.access_time,
-                    ),
-                  ),
+                  Expanded(child: _StatBox(title: 'Duration', value: ride.duration?.toTime ?? '0 min', icon: Icons.access_time)),
                   const SizedBox(width: 16),
-                  Expanded(
-                    child: _StatBox(
-                      title: 'Total Fare',
-                      value: ride.fare?.toCurrency ?? '\$0.00',
-                      icon: Icons.attach_money,
-                    ),
-                  ),
+                  Expanded(child: _StatBox(title: 'Total Fare', value: ride.fare?.toCurrency ?? '\$0.00', icon: Icons.attach_money)),
                 ],
               ),
               const SizedBox(height: 24),
-
-              // Close button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.kPrimaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: const Text('Close'),
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Close', style: TextStyle(color: AppColors.kWhite)),
                 ),
               ),
             ],
@@ -364,12 +299,7 @@ class _LocationRow extends StatelessWidget {
   final String text;
   final Color color;
 
-  const _LocationRow({
-    Key? key,
-    required this.icon,
-    required this.text,
-    required this.color,
-  }) : super(key: key);
+  const _LocationRow({Key? key, required this.icon, required this.text, required this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -380,7 +310,9 @@ class _LocationRow extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: context.textTheme.bodyMedium,
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: AppColors.kPrimaryColor,
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -396,13 +328,7 @@ class _DetailRow extends StatelessWidget {
   final IconData icon;
   final Color? iconColor;
 
-  const _DetailRow({
-    Key? key,
-    required this.title,
-    required this.value,
-    required this.icon,
-    this.iconColor,
-  }) : super(key: key);
+  const _DetailRow({Key? key, required this.title, required this.value, required this.icon, this.iconColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -412,33 +338,24 @@ class _DetailRow extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: (iconColor ?? context.colorScheme.primary).withOpacity(0.1),
+            color: (iconColor ?? AppColors.kPrimaryColor).withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
-            icon,
-            color: iconColor ?? context.colorScheme.primary,
-            size: 20,
-          ),
+          child: Icon(icon, color: iconColor ?? AppColors.kPrimaryColor, size: 20),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.colorScheme.onSurface.withOpacity(0.7),
-                ),
-              ),
+              Text(title, style: context.textTheme.bodyMedium?.copyWith(
+                color: AppColors.kPrimaryColor.withOpacity(0.7),
+              )),
               const SizedBox(height: 4),
-              Text(
-                value,
-                style: context.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              Text(value, style: context.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w500,
+                color: AppColors.kPrimaryColor,
+              )),
             ],
           ),
         ),
@@ -452,42 +369,28 @@ class _StatBox extends StatelessWidget {
   final String value;
   final IconData icon;
 
-  const _StatBox({
-    Key? key,
-    required this.title,
-    required this.value,
-    required this.icon,
-  }) : super(key: key);
+  const _StatBox({Key? key, required this.title, required this.value, required this.icon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: context.colorScheme.primary.withOpacity(0.1),
+        color: AppColors.kPrimaryColor.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
-          Icon(
-            icon,
-            color: context.colorScheme.primary,
-            size: 20,
-          ),
+          Icon(icon, color: AppColors.kPrimaryColor, size: 20),
           const SizedBox(height: 8),
-          Text(
-            title,
-            style: context.textTheme.bodySmall?.copyWith(
-              color: context.colorScheme.onSurface.withOpacity(0.7),
-            ),
-          ),
+          Text(title, style: context.textTheme.bodySmall?.copyWith(
+            color: AppColors.kPrimaryColor.withOpacity(0.7),
+          )),
           const SizedBox(height: 4),
-          Text(
-            value,
-            style: context.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Text(value, style: context.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: AppColors.kPrimaryColor,
+          )),
         ],
       ),
     );
